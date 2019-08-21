@@ -1,13 +1,17 @@
 import jinja2
 import webapp2
 import os
+from google.appengine.ext import ndb
 
 jinja_current_dir = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-k = 100
+class Score(ndb.Model):
+    k = ndb.IntegerProperty(required = False, default = 100)
+Karma = Score(k = 100)
+Karma.put()
 
 class Begin(webapp2.RequestHandler):
     def get(self):
@@ -16,18 +20,16 @@ class Begin(webapp2.RequestHandler):
 class continue1(webapp2.RequestHandler):
     def post(self):
         choice = self.request.get("choice")
+        k = Score.query().fetch()
         if choice == "Choice A":
-            k = k + 25
             template = jinja_current_dir.get_template("/template/continue1p1.html")
             self.response.write(template.render())
-        if choice == "Choice B":
+        elif choice == "Choice B":
             template = jinja_current_dir.get_template("/template/continue1p2.html")
             self.response.write(template.render())
-            k = k + 15
-        if choice == "Choice C":
+        elif choice == "Choice C":
             template = jinja_current_dir.get_template("/template/continue1p3.html")
             self.response.write(template.render())
-            k = k - 15
 class act2(webapp2.RequestHandler):
         def post(self):
             template = jinja_current_dir.get_template("/template/act2.html")
@@ -38,15 +40,12 @@ class continue2(webapp2.RequestHandler):
         if choice == "Choice A":
             template = jinja_current_dir.get_template("/template/continue2p1.html")
             self.response.write(template.render())
-            k = k + 15
         if choice == "Choice B":
             template = jinja_current_dir.get_template("/template/continue2p2.html")
             self.response.write(template.render())
-            k = k + 5
         if choice == "Choice C":
             template = jinja_current_dir.get_template("/template/continue2p3.html")
             self.response.write(template.render())
-            k = k - 15
 class act3(webapp2.RequestHandler):
         def post(self):
             template = jinja_current_dir.get_template("/template/act3.html")
@@ -57,15 +56,12 @@ class continue3(webapp2.RequestHandler):
         if choice == "Choice A":
             template = jinja_current_dir.get_template("/template/continue3p1.html")
             self.response.write(template.render())
-            k = k + 30
         if choice == "Choice B":
             template = jinja_current_dir.get_template("/template/continue3p2.html")
             self.response.write(template.render())
-            k = k + 10
         if choice == "Choice C":
             template = jinja_current_dir.get_template("/template/continue3p3.html")
             self.response.write(template.render())
-            k = k - 30
 class act4(webapp2.RequestHandler):
         def post(self):
             template = jinja_current_dir.get_template("/template/act4.html")
@@ -73,6 +69,7 @@ class act4(webapp2.RequestHandler):
 class continue4(webapp2.RequestHandler):
     def post(self):
         choice = self.request.get("choice")
+        k = Score.query().fetch()
         if choice == "Choice A" and k >= 150:
             template = jinja_current_dir.get_template("/template/continue4p1.html")
             self.response.write(template.render())
