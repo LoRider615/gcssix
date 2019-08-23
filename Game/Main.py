@@ -11,6 +11,7 @@ jinja_current_dir = jinja2.Environment(
 
 
 score = 100
+dl = {}
 
 class Begin(webapp2.RequestHandler):
     def get(self):
@@ -19,6 +20,7 @@ class Begin(webapp2.RequestHandler):
 class continue1(webapp2.RequestHandler):
     def post(self):
         global score
+        global dl
         score = 100
         choice = self.request.get("choice")
         if choice == "Choice A":
