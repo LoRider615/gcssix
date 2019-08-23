@@ -93,9 +93,12 @@ class continue4(webapp2.RequestHandler):
         if choice == "Choice B" and score < 50:
             template = jinja_current_dir.get_template("/template/continue4p3.html")
             self.response.write(template.render())
+        if choice == "Choice B" and score > 50:
+            template = jinja_current_dir.get_template("/template/continue4p2.html")
+            self.response.write(template.render())
         sK = KarmaScore(Kscore = score)
         sK.put()
-        
+
 app = webapp2.WSGIApplication([
     ('/', Begin),
     ('/continue1', continue1),
