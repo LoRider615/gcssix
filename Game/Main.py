@@ -2,16 +2,13 @@ import jinja2
 import webapp2
 import os
 from google.appengine.ext import ndb
+from Models import KarmaScore
 
 jinja_current_dir = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-class Score(ndb.Model):
-    k = ndb.IntegerProperty(required = False, default = 100)
-Karma = Score(k = 100)
-Karma.put()
 
 score = 100
 
@@ -24,7 +21,6 @@ class continue1(webapp2.RequestHandler):
         global score
         score = 100
         choice = self.request.get("choice")
-        #Karma = Score.query().fetch()
         if choice == "Choice A":
             score = score + 25
             template = jinja_current_dir.get_template("/template/continue1p1.html")
@@ -97,9 +93,9 @@ class continue4(webapp2.RequestHandler):
         if choice == "Choice B" and score < 50:
             template = jinja_current_dir.get_template("/template/continue4p3.html")
             self.response.write(template.render())
-        if choice == "Choice B" and score > 50:
-            template = jinja_current_dir.get_template("/template/continue4p2.html")
-            self.response.write(template.render())
+        sK = KarmaScore(Kscore = score)
+        sK.put()
+        
 app = webapp2.WSGIApplication([
     ('/', Begin),
     ('/continue1', continue1),
